@@ -5,6 +5,8 @@ class Http{
 	* @url 字符串，网址
 	*/
 	private $url;
+	private $header;
+	private $showHeader;
 
 	public function __CONSTRUCT($url){
 		$this->url = $url;
@@ -12,6 +14,14 @@ class Http{
 
 	public function setUrl($url){
 		$this->url = $url;
+	}
+
+	public function setShowHeader($state = 0){
+		$this->showHeader = $state;
+	}
+
+	public function setHead($header){
+		$this->header = $header;
 	}
 
 	public function postRequest($data){
@@ -88,11 +98,18 @@ class Http{
 	// $optArr, 多个数组
 	public function curlBase($optArr= NULL){
 		$ch = curl_init();
+		if(!empty($this->header)){
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $this->header);
+		}
+		
 		curl_setopt($ch, CURLOPT_URL, $this->url);
 		curl_setopt($ch, CURLOPT_TIMEOUT,60); 
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); 
-		curl_setopt($ch,CURLOPT_PROXY,'127.0.0.1:8888');
+		if($this->showHeader){
+			curl_setopt($ch, CURLOPT_HEADER, 1);
+		}
+		// curl_setopt($ch,CURLOPT_PROXY,'127.0.0.1:8888');
 		if(!is_null($optArr)){
 			curl_setopt_array($ch, $optArr);
 		}
