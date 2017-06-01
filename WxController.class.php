@@ -2,6 +2,16 @@
 namespace Home\Controller;
 
 use Think\Controller;
+
+$Wx = new WxController(C('appid'), C('secret'));
+
+$back_url = U('Login/index', '', false, true);
+//把login中的redire_url 放在session中，就不要拼在 back_url中了，不然会出现重复编码的情况
+$user_info = $Wx->get_snsapi_userinfo($back_url, I('get.code', 0));
+if(!$user_info){
+	die;
+}
+
 class WxController extends BaseController{
 	private $_appid;
 	private $_secret;
@@ -58,6 +68,7 @@ class WxController extends BaseController{
 	code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
 
 			redirect($this->_url);
+			return null;
 		}
 
 	}
