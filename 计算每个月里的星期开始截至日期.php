@@ -12,7 +12,8 @@ $cur_year = date('Y', $time);
 $cur_month = date('m', $time);
 $date_format = $cur_year . '-' . $cur_month;
 
-$total_month_day = cal_days_in_month(CAL_GREGORIAN, $cur_month, $cur_year);
+//$total_month_day = cal_days_in_month(CAL_GREGORIAN, $cur_month, $cur_year);//貌似这个方法需要--enable-calendar
+$total_month_day = date('t', $cur_year. '-' . $cur_month);
 
 $start_week = date('w', strtotime($date_format . '-01'));
 if($start_week == 0){
