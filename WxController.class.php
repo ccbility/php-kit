@@ -64,8 +64,7 @@ class WxController extends BaseController{
 		}else{
 			$back_url = urlencode($back_url);
 			
-			$this->_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->_appid}&redirect_uri={$back_url}&response_type=
-	code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+			$this->_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->_appid}&redirect_uri={$back_url}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
 
 			redirect($this->_url);
 			return null;
