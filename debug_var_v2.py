@@ -73,6 +73,8 @@ class DebugVarCommand(sublime_plugin.TextCommand):
 					space_num = len(match_cont.group(1))
 					if space_num > 0:
 						tab_str = space_num * ' '
+					else:
+						tab_str = ''
 
 				debug_str = "\n" + tab_str + deal_fun + '(' + prex + var_name + ')' + sep;
 
