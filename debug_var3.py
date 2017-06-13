@@ -42,8 +42,8 @@ class DebugVarCommand(sublime_plugin.TextCommand):
 			# 如果含 M D 这样的Thinkphp函数名，那么输出 getLastSql 或 _sql
 			# 
 			# python可以边赋值边判断真假？
-			D_match = re.match(r'.*(D\(\s*?' + var_name + '.*?\))\s*-', line_cont)
-			M_match = re.match(r'.*(M\(\s*?' + var_name + '.*?\))\s*-', line_cont)
+			D_match = re.match(r'.*(D\([\s\'\"]*?' + var_name + '.*?\))\s*-', line_cont)
+			M_match = re.match(r'.*(M\([\s\'\"]*?' + var_name + '.*?\))\s*-', line_cont)
 			this_var = re.match(r'.*?(\$this->' + var_name + ')', line_cont)
 			if D_match:
 				tp_m = D_match.group(1)
