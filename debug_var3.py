@@ -65,7 +65,7 @@ class DebugVarCommand(sublime_plugin.TextCommand):
 
 			elif tp_m:
 				indent_str = count_indent(line_cont)
-				debug_str = '\n' + indent_str + tp_m + '->_sql();'
+				debug_str = '\n' + indent_str + deal_fun + '(' + tp_m + '->_sql());'
 
 			else:
 				indent_str = count_indent(line_cont)
