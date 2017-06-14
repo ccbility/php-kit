@@ -13,12 +13,12 @@ function simpleVali(rules){
 					return rules[i][3];
 				}
 				break;
-			case 'max':
+			case 'maxlen':
 				if(data.length > rules[i][2]){
 					return rules[i][3];
 				}
 				break;
-			case 'min':
+			case 'minlen':
 				if(data.length < rules[i][2]){
 					return rules[i][3];
 				}
