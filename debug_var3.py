@@ -3,6 +3,7 @@ import sublime
 import sublime_plugin
 import os.path
 import re
+import collections
 
 def count_indent(line_cont):
 	#不光是空格，还可能两者一起混合存在,所以不能分情况，必须一起统计出来
@@ -11,8 +12,6 @@ def count_indent(line_cont):
 
 class DebugVarCommand(sublime_plugin.TextCommand):
 	#问题：
-	#一行有不止一个光标时，会出现bug
-	#一行太长的时候，光标没有停在应该的位置
 	def run(self, edit):
 		file_name = self.view.file_name()
 		ext = os.path.splitext(file_name)[1]
@@ -27,12 +26,18 @@ class DebugVarCommand(sublime_plugin.TextCommand):
 			sep = ';'
 			deal_fun = 'console.log'
 			end = 'return false;'
+		elif ext == '.py':
+			prex = ''
+			sep = ';'
+			deal_fun = 'print'
+			end = 'exit();'
 		else:
 			exit()
 
 		i = 1
 		total_len = len(self.view.sel())
 		move_bool = True
+		all_str = collections.OrderedDict()#有序字典
 		for region in self.view.sel():#所有光标所在的点
 			# sublime.message_dialog(str(var_name))
 			var_name = self.view.substr(self.view.word(region.begin()))
@@ -74,7 +79,22 @@ class DebugVarCommand(sublime_plugin.TextCommand):
 			if i == total_len:
 				debug_str += end
 
-			self.view.insert(edit, self.view.line(region).end(), debug_str)
+			pos = self.view.line(region).end()
+			if pos in all_str.keys():
+				all_str[pos] += debug_str.strip()
+			else:
+				all_str[pos] = debug_str
+			# self.view.insert(edit, self.view.line(region).end(), debug_str)
 			i += 1
+
+		#循环输出要调试的代码
+		# sublime.message_dialog(str(all_str))
+		offset = 0 #我们自己插入的字符，会影响后面要插入字符的定位
+		#要按照key的大小输出，不然乱序
+		for k in all_str:
+			self.view.insert(edit, k + offset, all_str[k])
+			offset += len(all_str[k])
 		if move_bool:
+			#为了解决一行字符过长导致定位错误的问题，先让它走到行尾再press down
+			self.view.run_command("move_to", {"to": "hardeol"})	
 			self.view.run_command("move", {"by": "lines", "forward": True})	
