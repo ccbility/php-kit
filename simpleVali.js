@@ -2,7 +2,10 @@
 //rules是一个数组，包含 选择器 规则 参数 错误返回提示
 function simpleVali(rules){
 	for (var i = 0, len = rules.length; i < len; i++) {
-		var data = $(rules[i][0]).val().trim();
+		var data = $(rules[i][0]).val();
+		if(data){
+			data = data.trim()
+		}
 		switch(rules[i][1]){
 			//后期可能要补一个传入文件 大小 和 后缀的检测
 			case 'require':
